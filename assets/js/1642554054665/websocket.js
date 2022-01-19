@@ -1,4 +1,4 @@
-const WS_HOST = "testing-hidodie.noiq.io";
+const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
 const MAP_STORAGE = "https://real2two.github.io/hidodie-maps";
 
 "use strict";
