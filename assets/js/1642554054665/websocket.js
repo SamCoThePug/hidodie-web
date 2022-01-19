@@ -1,3 +1,4 @@
+const WS_HOST = "testing-hidodie.noiq.io";
 const MAP_STORAGE = "https://real2two.github.io/hidodie-maps";
 
 "use strict";
@@ -10,7 +11,7 @@ connectionQueue();
 
 function connect() {
     let timeout_interval = Date.now();
-    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${location.host}:${location.port}/api/connect`);
+    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${WS_HOST}/api/connect`);
 
     ws.onopen = async() => {
         connected = true;
