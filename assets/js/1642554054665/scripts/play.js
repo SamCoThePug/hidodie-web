@@ -56,7 +56,7 @@ router.paths.play.unload = (path, dontdopath) => {
     
     if (!dontdopath && path !== "index") document.body.style.backgroundImage = "none";
 
-    if (fullscreen()) fullscreen(false);
+    if (p5_loaded && fullscreen()) fullscreen(false);
 }
 
 /* */
@@ -67,9 +67,11 @@ function saveColorAndClass() {
 }
 
 function createRoom() {
+    if (!p5_loaded_check) return;
+
     saveColorAndClass();
 
-    ws.send(JSON.stringify({
+    wsSend({
         a: "create_room",
         u: document.getElementById("username").value,
         c: chosenColor(),
@@ -79,31 +81,35 @@ function createRoom() {
         m: document.getElementById("create_mapid").value,
         d: document.getElementById("create_debug").checked,
         s: parseFloat(document.getElementById("create_seekers").value)
-    }));
+    });
 }
 
 function joinRoom(quick) {
+    if (!p5_loaded_check) return;
+    
     saveColorAndClass();
 
-    ws.send(JSON.stringify({
+    wsSend({
         a: quick ? "quick_join" : "join_room",
         u: document.getElementById("username").value,
         c: chosenColor(), 
         z: chooseClass(),
         r: quick ? undefined : document.getElementById("code").value
-    }));
+    });
 }
 
 function joinRoomCode(code) {
+    if (!p5_loaded_check) return;
+    
     saveColorAndClass();
 
-    ws.send(JSON.stringify({
+    wsSend({
         a: "join_room",
         u: document.getElementById("username").value,
         c: chosenColor(), 
         z: chooseClass(),
         r: code
-    }));
+    });
 }
 
 function chosenColor() {

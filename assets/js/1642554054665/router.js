@@ -164,9 +164,13 @@ const scripts = [
 
 const version = "1642554054665"; /* Change this in index.html. Also, change the folder name. */
 
+let p5_loaded = false;
+
 // https://usefulangle.com/post/343/javascript-load-multiple-script-by-order
 
 (async () => {
+    await loadScript(`/assets/js/p5/p5.min.js`);
+    await loadScript(`/assets/js/sweetalert2.js`);
     for (const name of scripts) await loadScript(`/assets/js/${version}/${name}.js`);
 })();
 
@@ -177,10 +181,28 @@ function loadScript(url) {
 		script.async = false;
 		script.onload = () => {
 			resolve(url);
+
+            if (url == `/assets/js/${version}/websocket.js`) {
+                let c_path = document.location.pathname.slice(1);
+                if (c_path == "loading" || c_path == "disconnected") c_path = "index";
+                if (join_query_id && c_path !== "play") join_query_id = undefined;
+                router.load(c_path || "index", true);
+            }
 		};
 		script.onerror = () => {
 			reject(url);
 		};
 		document.body.appendChild(script);
 	});
+}
+
+function p5_loaded_check() {
+    if (!p5_loaded) {
+        Swal.fire({
+            icon: 'error',
+            title: "Loading p5.js..."
+        });;
+    }
+
+    return p5_loaded;
 }

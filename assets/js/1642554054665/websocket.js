@@ -1,15 +1,14 @@
-const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
+const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
 const MAP_STORAGE = "https://real2two.github.io/hidodie-maps";
 
 "use strict";
 
 let ws;
 let latency;
-let connection_timeout;
+let connection_timeout;``
 let connected = false;
-connectionQueue();
 
-function connect() {
+function connect(first_ws) {
     let timeout_interval = Date.now();
     ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${WS_HOST}/api/connect`);
 
@@ -18,7 +17,7 @@ function connect() {
 
         console.log("[WEBSOCKET] Connected!");
 
-        wsSend({ a: "connected" });
+        wsSend(first_ws);
 
         ws.onmessage = async evt => {
             timeout_interval = Date.now();
@@ -32,11 +31,6 @@ function connect() {
 
                     if (data.f) {
                         if (data.u) game.logged_in = data.u;
-
-                        let path = document.location.pathname.slice(1);
-                        if (path == "loading" || path == "disconnected") path = "index";
-                        if (join_query_id && path !== "play") join_query_id = undefined;
-                        router.load(path || "index", true);
                     }
 
                     break;
@@ -288,15 +282,19 @@ function connect() {
         clearInterval(timeout_loop);
         ws = null;
 
-        Swal.close();
+        if (game.room) {
+            await router.load("index", true);
+            Swal.close();
+        }
 
-        await router.load("disconnected", true);
-
+        /*
         console.log("[WEBSOCKET] Reconnection queued.");
         connectionQueue();
+        */
     }
 }
 
+/*
 function connectionQueue() {
     if (ws) return console.log(`[WEBSOCKET] Something unexpected happened. connectionQueue() ran when the socket was already connected.`);
 
@@ -310,8 +308,10 @@ function connectionQueue() {
         }, connection_timeout + 5000 - Date.now());
     }
 }
+*/
 
 function wsSend(content) {
+    if (!ws) return connect(content);
     ws.send(JSON.stringify(content));
 }
 

@@ -10,6 +10,8 @@ function preload() {
 }
 
 function setup() {
+    p5_loaded = true;
+
     setInterval(() => {
         let movers = document.getElementsByClassName("home_move");
         for (let move of movers) {
@@ -290,7 +292,7 @@ function draw() {
 
     noStroke();
     fill("#FFFFFF");
-    text(`FPS: ${Math.round(getFrameRate())}\nPing: ${latency}ms`, 10, 20);
+    text(`FPS: ${Math.round(getFrameRate())}\nPing: ${latency ? `${latency}ms` : "???"}`, 10, 20);
     //text(`FPS: ${Math.round(getFrameRate())}\nPing: ${latency}ms\nRoom: ${game.room}\nHost: ${game.host.startsWith("[Guest] ") ? game.host.slice("[Guest] ".length) : game.host}\nVisibility: ${game.public ? "Public" : "Private"}\nMap ID: ${game.map.id}\nSeekers: ${game.seeker_count}\nGame Length: ${game.game_length / 1000} seconds`, 10, 20);
 
     if (touch.ing) {
