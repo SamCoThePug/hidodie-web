@@ -15,8 +15,10 @@
     <p>Username: <input id="username"> <button onclick="submit(); event.preventDefault();">Setup</button></p>
 
     <script>
+        const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
+        
         (async () => {
-            const req = await fetch("/admin/api/info");
+            const req = await fetch(WS_HOST + "/admin/api/info");
             const res = await req.json();
 
             if (res.error) {
@@ -28,7 +30,7 @@
         })();
 
         async function submit() {
-            const req = await fetch("/admin/setup", {
+            const req = await fetch(WS_HOST + "/admin/setup", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"

@@ -20,8 +20,10 @@
     <p>Email: <input id="email"> <button onclick="submit(); event.preventDefault();">Send</button></p>
 
     <script>
+        const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
+        
         (async () => {
-            const req = await fetch("/admin/api/info");
+            const req = await fetch(WS_HOST + "/admin/api/info");
             const res = await req.json();
 
             if (res.error) {
@@ -52,7 +54,7 @@
             history.pushState("", document.title, window.location.pathname + window.location.search);
 
             (async () => {
-                const req = await fetch("/admin/callback", {
+                const req = await fetch(WS_HOST + "/admin/callback", {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json"
@@ -76,7 +78,7 @@
         }
 
         async function submit() {
-            const req = await fetch("/admin/login", {
+            const req = await fetch(WS_HOST + "/admin/login", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"
