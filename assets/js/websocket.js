@@ -119,6 +119,9 @@ function connect(first_ws) {
                 case "particles-caught":
                     particles.caught.push(new Caught_Emitter(data.x, data.y, game.players[data.p].color));
                     break;
+                case "command":
+                    doChat(data.c, data.t);
+                    break;
                 case "message":
                     doChat(`${data.u.startsWith("[Guest] ") ? data.u.slice("[Guest] ".length) : data.u}: ${data.c}`);
                     break;

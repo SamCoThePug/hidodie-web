@@ -21,8 +21,21 @@ function sendMessage(content) {
     if (content.length !== 0) wsSend({ a: "message", c: content });
 }
 
-function doChat(content) {
-    game.messages.push(content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
+function doChat(content, command_type) {
+    switch (command_type) {
+        case 0: // gray text
+            game.messages.push(`<span style="color:#505050">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            break;
+        case 1: // error
+            game.messages.push(`<span style="color:#720000">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            break;
+        case 2: // success
+            game.messages.push(`<span style="color:#00461D">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            break;
+        default: // white text
+            game.messages.push(content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
+            break;
+    }
     game.messages = game.messages.slice(-9);
 
     document.getElementById("messages").innerHTML = game.messages.join("<br>");
