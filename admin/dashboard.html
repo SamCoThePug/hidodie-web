@@ -44,7 +44,7 @@
         const total_players = document.getElementById("total_players");
 
         (async () => {
-            const req = await fetch(WS_HOST + "/admin/api/info");
+            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`);
             const res = await req.json();
 
             if (res.error) {
