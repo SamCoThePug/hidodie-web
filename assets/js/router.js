@@ -141,9 +141,6 @@ document.body.onclick = evt => {
 // Load scripts.
 
 const scripts = [
-    "p5/p5.min",
-    "sweetalert2",
-
     "cookies",
 
     "right_click",
@@ -158,7 +155,6 @@ const scripts = [
     "game/movement",
     "game/particle_caught",
     "game/particle_teleported",
-    "game/sketch",
     "game/chat",
     "scripts/play",
     
@@ -170,7 +166,16 @@ let p5_loaded = false;
 // https://usefulangle.com/post/343/javascript-load-multiple-script-by-order
 
 (async () => {
-    for (const name of scripts) await loadScript(name);
+    await loadScript(`p5/p5.min`);
+    await loadScript(`sweetalert2`);
+    await loadScript(`game/sketch`);
+
+    let p5_loaded_check = setInterval(async () => {
+        if (p5_loaded) {
+            clearInterval(p5_loaded_check);
+            for (const name of scripts) await loadScript(name);
+        }
+    }, 100);
 })();
 
 function loadScript(name) {
