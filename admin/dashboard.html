@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.ico"/>
+    <title>Hidodie - Dashboard</title>
+    <link rel="stylesheet" href="/assets/css/style.css"></link>
+
+    <style>
+        #stuff {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <p><a href="/">Back</a></p>
+
+    <h2>Admin - Dashboard</h2>
+
+    <p id="username">Loading...</p>
+    <div id="stuff">
+        <p>
+            I didn't know what to add here, so there's no features for you to do here.<br>
+            I guess, enjoy your locked username!
+        </p>
+        <p><em>PS. the debug mode for maps only bypasses cache, so it fetches map data again. this is useful for testing maps.</em></p>
+        <p>
+            Rooms: <span id="total_rooms"></span><br>
+            Started Rooms: <span id="total_started_rooms"></span><br>
+            Idle Rooms: <span id="total_idle_rooms"></span><br>
+            Players: <span id="total_players"></span>
+        </p>
+    </div>
+
+    <script>
+        const stuff_span = document.getElementById("stuff");
+        const username_span = document.getElementById("username");
+        const total_rooms = document.getElementById("total_rooms");
+        const total_started_rooms = document.getElementById("total_started_rooms");
+        const total_idle_rooms = document.getElementById("total_idle_rooms");
+        const total_players = document.getElementById("total_players");
+
+        (async () => {
+            const req = await fetch("/admin/api/info");
+            const res = await req.json();
+
+            if (res.error) {
+                if (res.error == "Account isn't setup.") return location.href = "/admin/setup.html";
+                return location.href = "/admin/login.html";
+            }
+
+            const { username, rooms, players } = res;
+
+            username_span.innerHTML = `Logged in as <b>${username}</b>!`;
+            total_rooms.innerHTML = rooms.total;
+            total_started_rooms.innerHTML = `${rooms.started.total} (public: ${rooms.started.public}, private: ${rooms.started.private})`;
+            total_idle_rooms.innerHTML = `${rooms.idle.total} (public: ${rooms.idle.public}, private: ${rooms.idle.private})`;
+            total_players.innerHTML = `${players.total} (public: ${players.public}, private: ${players.private})`;
+            stuff_span.style.display = "block";
+        })();
+    </script>
+</body>
+</html>

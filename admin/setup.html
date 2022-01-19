@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidodie - Setup</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.ico"/>
+    <link rel="stylesheet" href="/assets/css/style.css"></link>
+    <script src="/assets/js/sweetalert2.js"></script>
+</head>
+<body>
+    <p><a href="/">Back</a></p>
+
+    <h2>Admin - Setup</h2>
+    <p>Username: <input id="username"> <button onclick="submit(); event.preventDefault();">Setup</button></p>
+
+    <script>
+        (async () => {
+            const req = await fetch("/admin/api/info");
+            const res = await req.json();
+
+            if (res.error) {
+                if (res.error == "Account isn't setup.") return;
+                location.href = "/admin/login.html";
+            } else {
+                location.href = "/admin/dashboard.html";
+            }
+        })();
+
+        async function submit() {
+            const req = await fetch("/admin/setup", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: document.getElementById("username").value
+                })
+            });
+
+            const res = await req.json();
+
+            if (res.error) 
+                return Swal.fire({
+                    icon: 'error',
+                    title: res.error
+                });
+
+            Swal.fire("Successfully setup your account!");
+            location.reload();
+        }
+    </script>
+</body>
+</html>

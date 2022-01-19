@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Hidodie - Admin Login">
+    <meta name="description" content="The administrator login page for Hidodie.">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="A hide and seek game.">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.ico"/>
+    <title>Hidodie - Login</title>
+    <link rel="stylesheet" href="/assets/css/style.css"></link>
+    <script src="/assets/js/sweetalert2.js"></script>
+</head>
+<body>
+    <p><a href="/">Back</a></p>
+
+    <h2>Admin - Login</h2>
+    <p>If you aren't an administrator, <b>please</b> get out.</p>
+    <p>Email: <input id="email"> <button onclick="submit(); event.preventDefault();">Send</button></p>
+
+    <script>
+        (async () => {
+            const req = await fetch("/admin/api/info");
+            const res = await req.json();
+
+            if (res.error) {
+                if (res.error == "Account isn't setup.") location.href = "/admin/setup.html";;
+            } else {
+                location.href = "/admin/dashboard.html";
+            }
+        })();
+
+        const urlParams = new URLSearchParams(window.location.hash.slice(1));
+        const error_description = urlParams.get('error_description');
+        const access_token = urlParams.get('access_token');
+
+        if (error_description) {
+            const possible_errors = [
+                "Confirmation Token not found",
+                "User not found"
+            ];
+
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+
+            Swal.fire({
+                icon: 'error',
+                title: error_description,
+                text: !possible_errors.includes(error_description) ? "Warning: This error could have been spoofed." : ""
+            });
+        } else if (access_token) {
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+
+            (async () => {
+                const req = await fetch("/admin/callback", {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        access_token: access_token
+                    })
+                });
+
+                const res = await req.json();
+
+                if (res.error) 
+                    return Swal.fire({
+                        icon: 'error',
+                        title: res.error
+                    });
+
+                Swal.fire("Successfully logged in.");
+                location.reload();
+            })();
+        }
+
+        async function submit() {
+            const req = await fetch("/admin/login", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: document.getElementById("email").value
+                })
+            });
+
+            const res = await req.json();
+
+            if (res.error) 
+                return Swal.fire({
+                    icon: 'error',
+                    title: res.error
+                });
+
+            Swal.fire("Email has been sent!");
+        }
+    </script>
+</body>
+</html>
