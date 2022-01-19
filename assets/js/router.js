@@ -148,14 +148,13 @@ const scripts = [
     "scripts/index",
     "scripts/licenses",
 
-    "game/setup",
     "game/usernames",
     "game/status",
     "game/settings",
     "game/movement",
     "game/particle_caught",
     "game/particle_teleported",
-    "game/chat",
+    "game/sketch",
     "scripts/play",
     
     "websocket" // MAKE "websocket" LOAD AFTER ALL THE PAGE SCRIPTS!!!
@@ -168,7 +167,8 @@ let p5_loaded = false;
 (async () => {
     await loadScript(`p5/p5.min`);
     await loadScript(`sweetalert2`);
-    await loadScript(`game/sketch`);
+    await loadScript(`game/chat`);
+    await loadScript(`game/setup`);
 
     let p5_loaded_check = setInterval(async () => {
         if (p5_loaded) {

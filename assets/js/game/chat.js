@@ -1,4 +1,4 @@
-function keyPressed(e) {
+function keyPressed() {
     if (keyCode == ENTER) {
         if (document.activeElement === document.getElementById("message")) {
             game.typing = false;
