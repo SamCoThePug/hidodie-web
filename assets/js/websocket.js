@@ -282,10 +282,10 @@ function connect(first_ws) {
         clearInterval(timeout_loop);
         ws = null;
 
-        if (game.room) {
+        if (game.room) //{
             await router.load("index", true);
-            Swal.close();
-        }
+            //Swal.close();
+        //}
 
         /*
         console.log("[WEBSOCKET] Reconnection queued.");
