@@ -1,5 +1,4 @@
 const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
-const MAP_STORAGE = "https://real2two.github.io/hidodie-maps";
 
 "use strict";
 
@@ -331,7 +330,7 @@ async function setupMap() {
 
     if (game.map.sounds.before && game.map.sounds.before.sound) {
         if (game.map.sounds.before && game.map.sounds.before) {
-            game.sounds.before = createAudio(`${MAP_STORAGE}/${game.map.id}/${game.map.sounds.before.sound}`);
+            game.sounds.before = createAudio(game.map.sounds.before.sound);
             game.sounds.before.volume(game.map.sounds.before.volume);
             game.sounds.before.loop();
         }
@@ -339,13 +338,13 @@ async function setupMap() {
 
     if (game.map.sounds.game && game.map.sounds.game.sound) {
         if (game.map.sounds.game) {
-            game.sounds.game = createAudio(`${MAP_STORAGE}/${game.map.id}/${game.map.sounds.game.sound}`);
+            game.sounds.game = createAudio(game.map.sounds.game.sound);
             game.sounds.game.volume(game.map.sounds.game.volume);
         }
     }
 
     if (game.map.images.background && game.map.images.background.img) {
-        loadImage(`${MAP_STORAGE}/${game.map.id}/${game.map.images.background.img}`, img => {
+        loadImage(game.map.images.background.img, img => {
             game.map_img.original_background = img;
             game.map_loaded.original_background = true;
         });
@@ -367,7 +366,7 @@ async function setupMap() {
     }
 
     if (game.map.images.foreground && game.map.images.foreground.img) {
-        loadImage(`${MAP_STORAGE}/${game.map.id}/${game.map.images.foreground.img}`, img => {
+        loadImage(game.map.images.foreground.img, img => {
             game.map_img.original_foreground = img;
             game.map_loaded.original_foreground = true;
         });
