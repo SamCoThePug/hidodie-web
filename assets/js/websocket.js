@@ -289,6 +289,9 @@ function connect(first_ws) {
             //Swal.close();
         //}
 
+        let swaltitle = Swal.getTitle();
+        if (swaltitle && swaltitle.innerHTML == "Settings") Swal.close();
+
         /*
         console.log("[WEBSOCKET] Reconnection queued.");
         connectionQueue();

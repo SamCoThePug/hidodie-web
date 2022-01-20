@@ -25,6 +25,7 @@ let game = {
     map_frame: {},
     map_fps: {},
     map_loop: {},
+    seeker_vision_img: null,
 
     players: {},
     interpolated_pos: {},
@@ -119,6 +120,13 @@ async function windowResized() { // https://riptutorial.com/html5-canvas/example
     resizeCanvas(1280 * game.scale, 720 * game.scale);
     fixChat();
   
+    delete game.seeker_vision_img;
+
+    let img_width = seeker_vision_img.width * game.scale;
+    let img_height = seeker_vision_img.height * game.scale;
+    game.seeker_vision_img = createImage(img_width, img_height);
+    game.seeker_vision_img.copy(seeker_vision_img, 0, 0, seeker_vision_img.width, seeker_vision_img.height, 0, 0, img_width, img_height);
+
     delete game.map_loaded.background;
     delete game.map_loaded.foreground;
     

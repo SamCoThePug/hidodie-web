@@ -46,7 +46,7 @@ function openSettings() {
         denyButtonText: `Leave`
     }).then((result) => {
         if (result.isDenied) 
-            wsSend({ a: "leave_room" });
+            ws.close();
     });
 }
 

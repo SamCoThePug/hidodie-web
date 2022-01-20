@@ -257,8 +257,8 @@ function draw() {
         }
     }
 
-    if (game.players[game.username] && game.players[game.username].role == SEEKER) image(seeker_vision_img, 0, 0, 1280 * game.scale, 720 * game.scale);
-
+    if (game.players[game.username] && game.players[game.username].role == SEEKER) image(game.seeker_vision_img, 0, 0);
+    
     noStroke();
     fill("#FFFFFF");
     text(`FPS: ${Math.round(getFrameRate())}\nPing: ${latency ? `${latency}ms` : "???"}`, 10, 20);
