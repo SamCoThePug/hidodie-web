@@ -20,10 +20,9 @@
     <p>Email: <input id="email"> <button onclick="submit(); event.preventDefault();">Send</button></p>
 
     <script>
-        const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
-        
+        const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
         (async () => {
-            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`);
+            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`, { credentials: 'include' });
             const res = await req.json();
 
             if (res.error) {
@@ -61,7 +60,8 @@
                     },
                     body: JSON.stringify({
                         access_token: access_token
-                    })
+                    }),
+                    credentials: 'include'
                 });
 
                 const res = await req.json();
@@ -85,7 +85,8 @@
                 },
                 body: JSON.stringify({
                     email: document.getElementById("email").value
-                })
+                }),
+                credentials: 'include'
             });
 
             const res = await req.json();

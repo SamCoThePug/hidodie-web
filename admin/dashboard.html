@@ -34,7 +34,7 @@
     </div>
 
     <script>
-        const WS_HOST = location.href == "http://localhost/" ? "localhost:81" : "testing-hidodie.noiq.io";
+        const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
         
         const stuff_span = document.getElementById("stuff");
         const username_span = document.getElementById("username");
@@ -44,7 +44,7 @@
         const total_players = document.getElementById("total_players");
 
         (async () => {
-            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`);
+            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`, { credentials: 'include' });
             const res = await req.json();
 
             if (res.error) {
