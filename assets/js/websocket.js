@@ -16,7 +16,7 @@ function connect(first_ws) {
 
         console.log("[WEBSOCKET] Connected!");
 
-        wsSend(first_ws);
+        sendWS(first_ws);
 
         ws.onmessage = async evt => {
             timeout_interval = Date.now();
@@ -315,9 +315,14 @@ function connectionQueue() {
 }
 */
 
-function wsSend(content) {
+function wsSend(content) { // REMOVE THIS!!!
     if (!ws) return connect(content);
     ws.send(JSON.stringify(content));
+}
+
+function sendWS(content) {
+    if (!ws) return connect(content);
+    ws.send(content);
 }
 
 async function setupMap() {

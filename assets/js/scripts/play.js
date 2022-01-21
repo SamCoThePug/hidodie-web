@@ -71,17 +71,19 @@ function createRoom() {
 
     saveColorAndClass();
 
-    wsSend({
-        a: "create_room",
-        u: document.getElementById("username").value,
-        c: chosenColor(),
-        z: chooseClass(),
-        p: document.getElementById("create_ispublic").checked,
-        t: parseFloat(document.getElementById("create_choosetimer").value),
-        m: document.getElementById("create_mapid").value,
-        d: document.getElementById("create_debug").checked,
-        s: parseFloat(document.getElementById("create_seekers").value)
-    });
+    //wsSend({
+    //    a: "create_room",
+    //    u: document.getElementById("username").value,
+    //    c: chosenColor(),
+    //    z: chooseClass(),
+    //    p: document.getElementById("create_ispublic").checked,
+    //    t: parseFloat(document.getElementById("create_choosetimer").value),
+    //    m: document.getElementById("create_mapid").value,
+    //    d: document.getElementById("create_debug").checked,
+    //    s: parseFloat(document.getElementById("create_seekers").value)
+    //});
+
+    sendWS(`0${document.getElementById("create_ispublic").checked ? 1 : 0}${parseFloat(document.getElementById("create_seekers").value)}${parseFloat(document.getElementById("create_choosetimer").value)},${document.getElementById("create_mapid").value || "random"},${chosenColor()}${chooseClass()}${document.getElementById("username").value}`)
 }
 
 function joinRoom(quick) {
@@ -89,6 +91,7 @@ function joinRoom(quick) {
     
     saveColorAndClass();
 
+    /*
     wsSend({
         a: quick ? "quick_join" : "join_room",
         u: document.getElementById("username").value,
@@ -96,6 +99,14 @@ function joinRoom(quick) {
         z: chooseClass(),
         r: quick ? undefined : document.getElementById("code").value
     });
+    */
+
+    if (quick) {
+        sendWS(`2${chosenColor()}${chooseClass()}${document.getElementById("username").value}`);
+    } else {
+        sendWS(`1${document.getElementById("code").value}${chosenColor()}${chooseClass()}${document.getElementById("username").value}`);
+    }
+
 }
 
 function joinRoomCode(code) {
@@ -103,6 +114,7 @@ function joinRoomCode(code) {
     
     saveColorAndClass();
 
+    /*
     wsSend({
         a: "join_room",
         u: document.getElementById("username").value,
@@ -110,6 +122,9 @@ function joinRoomCode(code) {
         z: chooseClass(),
         r: code
     });
+    */
+
+    sendWS(`1${code}${chosenColor()}${chooseClass()}${document.getElementById("username").value}`);
 }
 
 function chosenColor() {
@@ -123,7 +138,7 @@ function startGame() {
 const classes = ["stamina", "dash"];
 
 function chooseClass() {
-    return document.getElementById("join_class").value == "random" ? random(classes) : document.getElementById("join_class").value;
+    return document.getElementById("join_class").value == "random" ? classes.indexOf(random(classes)) : classes.indexOf(document.getElementById("join_class").value);
 }
 
 function playSetupContinue() {
