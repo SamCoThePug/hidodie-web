@@ -4,7 +4,7 @@ const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" :
 
 let ws;
 let latency;
-let connection_timeout;``
+let connection_timeout;
 let connected = false;
 
 function connect(first_ws) {
@@ -309,7 +309,8 @@ function connect(first_ws) {
 
             Swal.fire({
                 icon: 'error',
-                title: "You cannot join multiple rooms at a time!"
+                title: "The servers are busy currently!",
+                text: "You would've also gotten this error if you have the game open 3 times! If you are using a VPN, try disabling it or using another one."
             });
         }
         
