@@ -111,7 +111,7 @@ let router = new Router();
 
 window.onpopstate = function(e) {
     if (e.state) {
-        if (e.state.path !== "play") wsSend({ a: "leave_room" });
+        if (e.state.path !== "play") ws.close();
         router.load(e.state.path || "index", false, true);
     }
 };
