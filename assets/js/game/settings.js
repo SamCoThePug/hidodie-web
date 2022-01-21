@@ -67,5 +67,5 @@ function setSeekers() {
 }
 
 function changeClass() {
-    wsSend({ a: "change_class", z: document.getElementById("modify_class").value });
+    wsSend({ a: "change_class", z: chooseClass(true) });
 }

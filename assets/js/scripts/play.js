@@ -66,7 +66,44 @@ function saveColorAndClass() {
     setCookie("class", document.getElementById("join_class").value, 365);
 }
 
+function sendError(m) {
+    Swal.fire({
+        icon: 'error',
+        title: m
+    });
+
+    return false;
+}
+
+function checkIfGood(creating_room) {
+    let u = document.getElementById("username").value;
+    if (u.length == 0) return sendError("Your username cannot be empty.");
+    if (u.length > 11) return sendError("Your username cannot be over 11 characters.");
+    if (u.replace(/[0-9a-zA-Z]/g, "").length > 0) return sendError("A username can only consist of letters and numbers.");
+    
+    if (!creating_room) return true;
+
+    let t = parseFloat(document.getElementById("create_choosetimer").value);
+
+    if (t !== Math.round(t)) return sendError("The number of seconds on how long the game lasts must be rounded to the nearest whole number.");
+    if (t < 30) return sendError("The game must last at least 30 seconds.");
+    if (t > 600) return sendError("The game must last less than 600 seconds.");
+
+    let s = parseFloat(document.getElementById("create_seekers").value);
+
+    if (s !== Math.round(s)) return sendError("You can't have decimal of seekers ingame.");
+    if (s < 1) return sendError("There must be at least 1 seeker.");
+    if (s > 3) return sendError("There cannot be over 3 seekers.");
+
+    let m = document.getElementById("create_mapid").value;
+
+    if (m.replace(/[0-9a-zA-Z]/g, "").replace(/_/g, "").length > 0) return sendError("A map ID can only contain numbers, letters, and underscores.");
+
+    return true;
+}
+
 function createRoom() {
+    if (!checkIfGood(true)) return;
     if (!p5_loaded_check) return;
 
     saveColorAndClass();
@@ -87,6 +124,7 @@ function createRoom() {
 }
 
 function joinRoom(quick) {
+    if (!checkIfGood()) return;
     if (!p5_loaded_check) return;
     
     saveColorAndClass();
@@ -110,6 +148,7 @@ function joinRoom(quick) {
 }
 
 function joinRoomCode(code) {
+    if (!checkIfGood()) return;
     if (!p5_loaded_check) return;
     
     saveColorAndClass();
@@ -137,8 +176,8 @@ function startGame() {
 
 const classes = ["stamina", "dash"];
 
-function chooseClass() {
-    return document.getElementById("join_class").value == "random" ? classes.indexOf(random(classes)) : classes.indexOf(document.getElementById("join_class").value);
+function chooseClass(modify) {
+    return document.getElementById(modify ? "modify_class" : "join_class").value == "random" ? classes.indexOf(random(classes)) : classes.indexOf(document.getElementById(modify ? "modify_class" : "join_class").value);
 }
 
 function playSetupContinue() {
