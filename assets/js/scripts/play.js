@@ -128,6 +128,7 @@ function createRoom() {
 }
 
 function joinRoom(quick) {
+    if (game.connecting) return;
     if (!p5_loaded_check) return;
     if (!checkIfGood()) return;
     
@@ -154,6 +155,7 @@ function joinRoom(quick) {
 }
 
 function joinRoomCode(code) {
+    if (game.connecting) return;
     if (!p5_loaded_check) return;
     if (!checkIfGood()) return;
     

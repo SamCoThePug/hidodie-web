@@ -10,6 +10,7 @@ let connected = false;
 function connect(first_ws) {
     let timeout_interval = Date.now();
     ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${WS_HOST}/api/connect`);
+    let test_if_open;
 
     ws.onopen = async() => {
         connected = true;
@@ -18,7 +19,17 @@ function connect(first_ws) {
 
         sendWS(first_ws);
 
+        test_if_open = setTimeout(() => {
+            if (game.connecting) 
+                ws.close();
+        }, 5000);
+
         ws.onmessage = async evt => {
+            if (test_if_open) {
+                game.connecting = false;
+                clearTimeout(test_if_open);
+            }
+
             timeout_interval = Date.now();
 
             const data = JSON.parse(evt.data);
@@ -301,6 +312,8 @@ function connect(first_ws) {
                 title: "You cannot join multiple rooms at a time!"
             });
         }
+        
+        if (test_if_open) clearTimeout(test_if_open);
 
         /*
         console.log("[WEBSOCKET] Reconnection queued.");
