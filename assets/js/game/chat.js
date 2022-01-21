@@ -18,7 +18,7 @@ function keyPressed() {
 }
 
 function sendMessage(content) {
-    if (content.length !== 0) wsSend({ a: "message", c: content });
+    if (content.length !== 0) sendWS(`3${content}`);
 }
 
 function doChat(content, command_type) {

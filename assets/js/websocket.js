@@ -26,7 +26,7 @@ function connect(first_ws) {
 
             switch(data.a) {
                 case "ping":
-                    wsSend({ a: "ping" });
+                    sendWS(`00`);
 
                     if (data.f) {
                         if (data.u) game.logged_in = data.u;
@@ -136,7 +136,7 @@ function connect(first_ws) {
                     document.getElementById("status_box").style.display = "none";
                     document.getElementById("game_loading").style.display = "block";
 
-                    wsSend({ a: "ping", s: true });
+                    sendWS(`01`);
                     break;
                 case "game_start":
                     document.getElementById("game_loading").style.display = "none";
@@ -314,11 +314,6 @@ function connectionQueue() {
     }
 }
 */
-
-function wsSend(content) { // REMOVE THIS!!!
-    if (!ws) return connect(content);
-    ws.send(JSON.stringify(content));
-}
 
 function sendWS(content) {
     if (!ws) return connect(content);

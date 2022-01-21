@@ -1,6 +1,6 @@
 function doubleClicked() {
     if (!game.room) return;
-    if (game.players[game.username].class == "dash" && !game.dashCooldown) wsSend({ a: "dash" });
+    if (game.players[game.username].class == "dash" && !game.dashCooldown) sendWS(`2`);
 }
 
 function touchStarted(event) {
@@ -45,7 +45,7 @@ function touchEnded() {
 
 function updateMovement(new_movement) {
     if (game.movement.x !== new_movement.x || game.movement.y !== new_movement.y) {
-        wsSend({ a: "movement", ...new_movement });
+        sendWS(`1${new_movement.x}${new_movement.y}`);
 
         game.movement = new_movement;
     }

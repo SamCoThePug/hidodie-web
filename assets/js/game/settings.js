@@ -51,21 +51,24 @@ function openSettings() {
 }
 
 function togglePublic() {
-    wsSend({ a: "toggle_public" });
+    sendWS(`6`);
 }
 
 function setTimer() {
-    wsSend({ a: "set_timer", t: parseFloat(document.getElementById("modify_choosetimer").value) });
+    if (!checkIfGood(false, true)) return;
+    sendWS(`9${parseFloat(document.getElementById("modify_choosetimer").value)}`);
 }
 
 function setMap() {
-    wsSend({ a: "set_map", m: document.getElementById("modify_mapid").value });
+    if (!checkIfGood(false, true)) return;
+    sendWS(`7${document.getElementById("modify_mapid").value}`);
 }
 
 function setSeekers() {
-    wsSend({ a: "set_seekers", s: parseFloat(document.getElementById("modify_seekers").value) });
+    if (!checkIfGood(false, true)) return;
+    sendWS(`8${parseFloat(document.getElementById("modify_seekers").value)}`);
 }
 
 function changeClass() {
-    wsSend({ a: "change_class", z: chooseClass(true) });
+    sendWS(`4${chooseClass(true)}`);
 }

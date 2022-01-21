@@ -75,27 +75,29 @@ function sendError(m) {
     return false;
 }
 
-function checkIfGood(creating_room) {
-    let u = document.getElementById("username").value;
-    if (u.length == 0) return sendError("Your username cannot be empty.");
-    if (u.length > 11) return sendError("Your username cannot be over 11 characters.");
-    if (u.replace(/[0-9a-zA-Z]/g, "").length > 0) return sendError("A username can only consist of letters and numbers.");
-    
-    if (!creating_room) return true;
+function checkIfGood(creating_room, modify_settings) {
+    if (!modify_settings) {
+        let u = document.getElementById("username").value;
+        if (u.length == 0) return sendError("Your username cannot be empty.");
+        if (u.length > 11) return sendError("Your username cannot be over 11 characters.");
+        if (u.replace(/[0-9a-zA-Z]/g, "").length > 0) return sendError("A username can only consist of letters and numbers.");
+        
+        if (!creating_room) return true;
+    }
 
-    let t = parseFloat(document.getElementById("create_choosetimer").value);
+    let t = parseFloat(document.getElementById(modify_settings ? "modify_choosetimer" : "create_choosetimer").value);
 
     if (t !== Math.round(t)) return sendError("The number of seconds on how long the game lasts must be rounded to the nearest whole number.");
     if (t < 30) return sendError("The game must last at least 30 seconds.");
     if (t > 600) return sendError("The game must last less than 600 seconds.");
 
-    let s = parseFloat(document.getElementById("create_seekers").value);
+    let s = parseFloat(document.getElementById(modify_settings ? "modify_seekers" : "create_seekers").value);
 
     if (s !== Math.round(s)) return sendError("You can't have decimal of seekers ingame.");
     if (s < 1) return sendError("There must be at least 1 seeker.");
     if (s > 3) return sendError("There cannot be over 3 seekers.");
 
-    let m = document.getElementById("create_mapid").value;
+    let m = document.getElementById(modify_settings ? "modify_mapid" : "create_mapid").value;
 
     if (m.replace(/[0-9a-zA-Z]/g, "").replace(/_/g, "").length > 0) return sendError("A map ID can only contain numbers, letters, and underscores.");
 
@@ -171,7 +173,7 @@ function chosenColor() {
 }
 
 function startGame() {
-    wsSend({ a: "start_game" });
+    sendWS(`5`);
 }
 
 const classes = ["stamina", "dash"];
