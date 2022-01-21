@@ -118,7 +118,7 @@ function joinRoomCode(code) {
     wsSend({
         a: "join_room",
         u: document.getElementById("username").value,
-        c: chosenColor(), 
+        c: chosenColor(),
         z: chooseClass(),
         r: code
     });
