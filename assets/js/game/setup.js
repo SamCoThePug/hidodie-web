@@ -18,6 +18,8 @@ let game = {
     started: false,
     timer: null,
 
+    connecting: false,
+
     fully_loaded: false,
     map: {},
     map_loaded: {},

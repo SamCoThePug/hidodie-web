@@ -224,6 +224,7 @@ function connect(first_ws) {
                     router.load("index");
                     break;
                 case "join_room":
+                    game.connecting = false;
                     join_query_id = undefined;
                     
                     document.body.style.backgroundImage = "none";
@@ -291,6 +292,15 @@ function connect(first_ws) {
 
         let swaltitle = Swal.getTitle();
         if (swaltitle && swaltitle.innerHTML == "Settings") Swal.close();
+
+        if (game.connecting) {
+            game.connecting = false;
+
+            Swal.fire({
+                icon: 'error',
+                title: "You cannot join multiple rooms at a time!"
+            });
+        }
 
         /*
         console.log("[WEBSOCKET] Reconnection queued.");

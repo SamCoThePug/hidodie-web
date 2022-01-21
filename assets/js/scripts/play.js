@@ -105,8 +105,8 @@ function checkIfGood(creating_room, modify_settings) {
 }
 
 function createRoom() {
-    if (!checkIfGood(true)) return;
     if (!p5_loaded_check) return;
+    if (!checkIfGood(true)) return;
 
     saveColorAndClass();
 
@@ -122,12 +122,14 @@ function createRoom() {
     //    s: parseFloat(document.getElementById("create_seekers").value)
     //});
 
+    game.connecting = true;
+
     sendWS(`0${document.getElementById("create_ispublic").checked ? 1 : 0}${parseFloat(document.getElementById("create_seekers").value)}${parseFloat(document.getElementById("create_choosetimer").value)},${document.getElementById("create_mapid").value || "random"},${chosenColor()}${chooseClass()}${document.getElementById("username").value}`)
 }
 
 function joinRoom(quick) {
-    if (!checkIfGood()) return;
     if (!p5_loaded_check) return;
+    if (!checkIfGood()) return;
     
     saveColorAndClass();
 
@@ -141,6 +143,8 @@ function joinRoom(quick) {
     });
     */
 
+    game.connecting = true;
+    
     if (quick) {
         sendWS(`2${chosenColor()}${chooseClass()}${document.getElementById("username").value}`);
     } else {
@@ -150,8 +154,8 @@ function joinRoom(quick) {
 }
 
 function joinRoomCode(code) {
-    if (!checkIfGood()) return;
     if (!p5_loaded_check) return;
+    if (!checkIfGood()) return;
     
     saveColorAndClass();
 
@@ -164,6 +168,8 @@ function joinRoomCode(code) {
         r: code
     });
     */
+    
+    game.connecting = true;
 
     sendWS(`1${code}${chosenColor()}${chooseClass()}${document.getElementById("username").value}`);
 }
