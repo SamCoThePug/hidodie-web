@@ -60,7 +60,9 @@
                 confirmButtonText: 'Sign in',
                 focusConfirm: false
             }).then(async () => {
-                const req = await fetch(`${document.location.protocol}//${Swal.getPopup().querySelector('#region').value.toString()}/admin/callback`, {
+                const WS_HOST = Swal.getPopup().querySelector('#region').value.toString();
+                
+                const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/callback`, {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json"
