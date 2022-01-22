@@ -13,7 +13,6 @@ router.paths.play.load = () => {
     }
     
     const regionSelect = document.getElementById("region");
-
     
     if (location.href.startsWith("http://localhost/")) {
         let opt = document.createElement('option');

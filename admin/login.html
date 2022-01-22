@@ -20,7 +20,8 @@
     <p>Email: <input id="email"> <button onclick="submit(); event.preventDefault();">Send</button></p>
 
     <script>
-        const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
+        const WS_HOSTS = location.href.startsWith("http://localhost/") ? ["localhost:81"] : ["testing-hidodie.noiq.io", "hidodie.herokuapp.com"];
+        /*
         (async () => {
             const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`, { credentials: 'include' });
             const res = await req.json();
@@ -31,6 +32,7 @@
                 location.href = "/admin/dashboard.html";
             }
         })();
+        */
 
         const urlParams = new URLSearchParams(window.location.hash.slice(1));
         const error_description = urlParams.get('error_description');
@@ -52,7 +54,15 @@
         } else if (access_token) {
             history.pushState("", document.title, window.location.pathname + window.location.search);
 
-            (async () => {
+            Swal.fire({
+                title: 'Login - Select a region.',
+                html: `<select id="region" class="swal2-input"></select>`,
+                confirmButtonText: 'Sign in',
+                focusConfirm: false,
+                preConfirm: () => {
+                    return Swal.getPopup().querySelector('#region').value;
+                }
+            }).then(async WS_HOST => {
                 const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/callback`, {
                     method: "post",
                     headers: {
@@ -73,12 +83,20 @@
                     });
 
                 Swal.fire("Successfully logged in.");
-                location.reload();
-            })();
+                location.href = `dashboard.html#region=${encodeURIComponent(WS_HOST)}`;
+            });
+            
+            const regionSelect = document.getElementById("region");
+
+            for (let WS_HOST of WS_HOSTS) {
+                let opt = document.createElement('option');
+                opt.innerHTML = WS_HOST;
+                regionSelect.appendChild(opt);
+            }
         }
 
         async function submit() {
-            const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/login`, {
+            const req = await fetch(`${document.location.protocol}//${WS_HOSTS[0]}/admin/login`, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json"

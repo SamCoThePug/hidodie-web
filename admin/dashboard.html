@@ -34,7 +34,10 @@
     </div>
 
     <script>
-        const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
+        const urlParams = new URLSearchParams(window.location.hash.slice(1));
+        let WS_HOST = urlParams.get('region');
+
+        if (!WS_HOST) return location.href = "/admin/login.html";
         
         const stuff_span = document.getElementById("stuff");
         const username_span = document.getElementById("username");
@@ -48,7 +51,7 @@
             const res = await req.json();
 
             if (res.error) {
-                if (res.error == "Account isn't setup.") return location.href = "/admin/setup.html";
+                if (res.error == "Account isn't setup.") return location.href = `/admin/setup.html#region=${WS_HOST}`;
                 return location.href = "/admin/login.html";
             }
 
