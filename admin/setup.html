@@ -18,7 +18,7 @@
         const urlParams = new URLSearchParams(window.location.hash.slice(1));
         let WS_HOST = urlParams.get('region');
 
-        if (!WS_HOST) return location.href = "/admin/login.html";
+        if (!WS_HOST) location.href = "/admin/login.html";
         
         (async () => {
             const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/api/info`, { credentials: 'include' });
