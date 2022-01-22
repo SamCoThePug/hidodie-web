@@ -257,7 +257,7 @@ function draw() {
         }
     }
 
-    if (game.players[game.username] && game.players[game.username].role == SEEKER) image(game.seeker_vision_img, 0, 0);
+    if (game.players[game.username] && game.players[game.username].role == HIDER) image(game.hiders_vision_img, 0, 0);
     
     noStroke();
     fill("#FFFFFF");

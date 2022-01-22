@@ -27,7 +27,7 @@ let game = {
     map_frame: {},
     map_fps: {},
     map_loop: {},
-    seeker_vision_img: null,
+    hiders_vision_img: null,
 
     players: {},
     interpolated_pos: {},
@@ -83,10 +83,10 @@ const color_text = [
 ]
 const color_images = {};
 
-let seeker_vision_img;
+let hiders_vision_img;
 
 function preload() {
-    seeker_vision_img = loadImage("/assets/img/seeker_vision.png");
+    hiders_vision_img = loadImage("/assets/img/hiders_vision.png");
 
     let i = 0;
     let colors = ["aqua", "blue", "brown", "gray", "green", "orange", "pink", "purple", "red", "yellow"];
@@ -122,12 +122,12 @@ async function windowResized() { // https://riptutorial.com/html5-canvas/example
     resizeCanvas(1280 * game.scale, 720 * game.scale);
     fixChat();
   
-    delete game.seeker_vision_img;
+    delete game.hiders_vision_img;
 
-    let img_width = seeker_vision_img.width * game.scale;
-    let img_height = seeker_vision_img.height * game.scale;
-    game.seeker_vision_img = createImage(img_width, img_height);
-    game.seeker_vision_img.copy(seeker_vision_img, 0, 0, seeker_vision_img.width, seeker_vision_img.height, 0, 0, img_width, img_height);
+    let img_width = hiders_vision_img.width * game.scale;
+    let img_height = hiders_vision_img.height * game.scale;
+    game.hiders_vision_img = createImage(img_width, img_height);
+    game.hiders_vision_img.copy(hiders_vision_img, 0, 0, hiders_vision_img.width, hiders_vision_img.height, 0, 0, img_width, img_height);
 
     delete game.map_loaded.background;
     delete game.map_loaded.foreground;
