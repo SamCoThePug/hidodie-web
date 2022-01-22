@@ -1,4 +1,11 @@
-const WS_HOST = location.href.startsWith("http://localhost/") ? "localhost:81" : "testing-hidodie.noiq.io";
+const LOCATIONS = {
+    "Testing Node": "testing-hidodie.noiq.io",
+    "USA-1": "hidodie.herokuapp.com"
+}
+
+if (location.href.startsWith("http://localhost/")) LOCATIONS["Local"] = "localhost:81";
+
+let WS_HOST = location.href.startsWith("http://localhost/") ? "Local" : "USA-1";
 
 "use strict";
 
@@ -9,7 +16,7 @@ let connected = false;
 
 function connect(first_ws) {
     let timeout_interval = Date.now();
-    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${WS_HOST}/api/connect`);
+    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${LOCATIONS[WS_HOST]}/api/connect`);
     let test_if_open;
 
     ws.onopen = async() => {
@@ -314,7 +321,7 @@ function connect(first_ws) {
             Swal.fire({
                 icon: 'error',
                 title: "The servers are busy currently!",
-                text: "You would've also gotten this error if you have the game open 3 times! If you are using a VPN, try disabling it or using another one."
+                text: "You could've also gotten this error if you have the game open 3 times!\nIf you are using a VPN, try disabling it or using another one."
             });
         }
         

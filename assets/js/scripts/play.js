@@ -12,6 +12,21 @@ router.paths.play.load = () => {
         document.getElementById("username").value = getCookie("username");
     }
     
+    const regionSelect = document.getElementById("region");
+
+    
+    if (location.href.startsWith("http://localhost/")) {
+        let opt = document.createElement('option');
+        opt.innerHTML = "Local";
+        regionSelect.appendChild(opt);
+    }
+
+    for (let [ id ] of Object.entries(LOCATIONS).filter(([id]) => id !== "Local")) {
+        let opt = document.createElement('option');
+        opt.innerHTML = id;
+        regionSelect.appendChild(opt);
+    }
+    
     const colorSelect = document.getElementById("color");
 
     for (let i, j = 0; i = colorSelect.options[j]; j++) 
@@ -104,9 +119,13 @@ function checkIfGood(creating_room, modify_settings) {
     return true;
 }
 
-function createRoom() {
+async function createRoom() {
+    if (game.connecting) return;
     if (!p5_loaded_check) return;
-    if (!checkIfGood(true)) return;
+    if (!checkIfGood()) return;
+
+    WS_HOST = document.getElementById("region").value;
+    if (!(await makeSureNodeIsOnline())) return;
 
     saveColorAndClass();
 
@@ -127,10 +146,13 @@ function createRoom() {
     sendWS(`0${document.getElementById("create_ispublic").checked ? 1 : 0}${parseFloat(document.getElementById("create_seekers").value)}${parseFloat(document.getElementById("create_choosetimer").value)},${document.getElementById("create_mapid").value || "random"},${chosenColor()}${chooseClass()}${document.getElementById("username").value}`)
 }
 
-function joinRoom(quick) {
+async function joinRoom(quick) {
     if (game.connecting) return;
     if (!p5_loaded_check) return;
     if (!checkIfGood()) return;
+
+    WS_HOST = document.getElementById("region").value;
+    if (!(await makeSureNodeIsOnline())) return;
     
     saveColorAndClass();
 
@@ -154,10 +176,13 @@ function joinRoom(quick) {
 
 }
 
-function joinRoomCode(code) {
+async function joinRoomCode(code) {
     if (game.connecting) return;
     if (!p5_loaded_check) return;
     if (!checkIfGood()) return;
+
+    WS_HOST = document.getElementById("region").value;
+    if (!(await makeSureNodeIsOnline())) return;
     
     saveColorAndClass();
 
@@ -198,6 +223,31 @@ function playSetupContinue() {
 function playSetupBack() {
     document.getElementById("join_chooseroom").style.display = "none";
     document.getElementById("join_basics").style.display = "block";
+}
+
+async function makeSureNodeIsOnline() {
+    return await new Promise((resolve, reject) => {
+        fetch(`http${(document.location.protocol == "https:" ? "s" : "")}//${LOCATIONS[WS_HOST]}`)
+            .then(async node_req => {
+                if (!node_req.ok) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: "The servers are busy currently!"
+                    });
+
+                    return resolve(false);
+                }
+                resolve(true);
+            }).catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: "The servers are busy currently!"
+                });
+
+                console.log(err);
+                resolve(false);
+            });
+    })
 }
 
 function copyPlayLink() {
