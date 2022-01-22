@@ -227,7 +227,7 @@ function playSetupBack() {
 
 async function makeSureNodeIsOnline() {
     return await new Promise((resolve, reject) => {
-        fetch(`http${(document.location.protocol == "https:" ? "s" : "")}//${LOCATIONS[WS_HOST]}`)
+        fetch(`http${(document.location.protocol == "https:" ? "s" : "")}://${LOCATIONS[WS_HOST]}`)
             .then(async node_req => {
                 if (!node_req.ok) {
                     Swal.fire({
