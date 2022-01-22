@@ -1,5 +1,6 @@
 "use strict";
 
+let join_query_region = Object.fromEntries(new URLSearchParams(window.location.search).entries()).region;
 let join_query_id = Object.fromEntries(new URLSearchParams(window.location.search).entries()).room;
 
 // Router.
@@ -61,7 +62,10 @@ class Router {
         if (new_path == this.current_path && !first_time) return;
         if (!this.paths[new_path]) return this.load("index");
 
-        if (!["loading", "play"].includes(new_path)) join_query_id = undefined;
+        if (!["loading", "play"].includes(new_path)) {
+            join_query_region = undefined;
+            join_query_id = undefined;
+        }
 
         let { unload } = this.paths[this.current_path];
         if (unload) unload(new_path);
@@ -191,7 +195,10 @@ function loadScript(name) {
             if (name == `websocket`) {
                 let c_path = document.location.pathname.slice(1);
                 if (c_path == "loading" || c_path == "disconnected") c_path = "index";
-                if (join_query_id && c_path !== "play") join_query_id = undefined;
+                if ((join_query_id || join_query_region) && c_path !== "play") {
+                    join_query_region = undefined;
+                    join_query_id = undefined;
+                }
                 router.load(c_path || "index", true);
             }
 		};

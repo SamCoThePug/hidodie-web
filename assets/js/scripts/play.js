@@ -4,7 +4,12 @@ router.paths.play.load = () => {
 
     if (document.body.style.backgroundImage.length !== background) document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), url(https://real2two.github.io/hidodie-maps/beta_vibes/blurred.png)";
 
-    document.getElementById("room_buttons").innerHTML = join_query_id ? `<button id="join_room_from_id_button" onclick="joinRoomCode(join_query_id);" class="theme_primary_color">Join</button>` : `<button onclick="joinRoom(true)" class="theme_primary_color">Quick Join</button> <button onclick="playSetupContinue()" class="theme_color">Create Room</button>`;
+    if (join_query_region && join_query_id && !LOCATIONS[join_query_region]) {
+        join_query_id = undefined;
+        join_query_region = undefined;
+    }
+
+    document.getElementById("room_buttons").innerHTML = join_query_region && join_query_id ? `<button id="join_room_from_id_button" onclick="joinRoomCode(join_query_id);" class="theme_primary_color">Join</button>` : `<button onclick="joinRoom(true)" class="theme_primary_color">Quick Join</button> <button onclick="playSetupContinue()" class="theme_color">Create Room</button>`;
 
     if (game.logged_in) {
         document.getElementById("username").value = game.logged_in;
@@ -13,17 +18,25 @@ router.paths.play.load = () => {
     }
     
     const regionSelect = document.getElementById("region");
-    
-    if (location.href.startsWith("http://localhost/")) {
-        let opt = document.createElement('option');
-        opt.innerHTML = "Local";
-        regionSelect.appendChild(opt);
-    }
 
-    for (let [ id ] of Object.entries(LOCATIONS).filter(([id]) => id !== "Local")) {
+    if (join_query_region && join_query_id) {
+        regionSelect.disabled = true;
+
         let opt = document.createElement('option');
-        opt.innerHTML = id;
+        opt.innerHTML = join_query_region;
         regionSelect.appendChild(opt);
+    } else {
+        if (location.href.startsWith("http://localhost/")) {
+            let opt = document.createElement('option');
+            opt.innerHTML = "Local";
+            regionSelect.appendChild(opt);
+        }
+    
+        for (let [ id ] of Object.entries(LOCATIONS).filter(([id]) => id !== "Local")) {
+            let opt = document.createElement('option');
+            opt.innerHTML = id;
+            regionSelect.appendChild(opt);
+        }
     }
     
     const colorSelect = document.getElementById("color");
@@ -231,7 +244,7 @@ async function makeSureNodeIsOnline() {
                 if (!node_req.ok) {
                     Swal.fire({
                         icon: 'error',
-                        title: "The servers are busy currently!"
+                        title: "The servers are currently busy!"
                     });
 
                     return resolve(false);
@@ -240,7 +253,7 @@ async function makeSureNodeIsOnline() {
             }).catch(err => {
                 Swal.fire({
                     icon: 'error',
-                    title: "The servers are busy currently!"
+                    title: "The servers are currently busy!"
                 });
 
                 console.log(err);
@@ -250,7 +263,7 @@ async function makeSureNodeIsOnline() {
 }
 
 function copyPlayLink() {
-    navigator.clipboard.writeText(`${location.protocol}//${document.location.hostname}/play?room=${game.room}`);
+    navigator.clipboard.writeText(`${location.protocol}//${document.location.hostname}/play?region=${WS_HOST}&room=${game.room}`);
 
     Swal.fire({
         icon: 'success',

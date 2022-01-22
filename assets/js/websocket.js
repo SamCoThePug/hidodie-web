@@ -110,10 +110,14 @@ function connect(first_ws) {
                         title: data.m
                     });
 
-                    if (join_query_id) {
+                    if (join_query_region && join_query_id) {
                         if (["A player with the provided username is already on the room.", "Your username cannot be empty.", "Your username cannot be over 11 characters.", "A username can only consist of letters and numbers.", "Illegal username. Choose another username.", "The game already started. (has a synced map)"].includes(data.m)) return playSetupBack();
 
-                        join_query_id = undefined;
+                        if (join_query_region && join_query_id) {
+                            join_query_region = undefined;
+                            join_query_id = undefined;
+                            router.load("index");
+                        }
                     }
 
                     break;
@@ -248,6 +252,7 @@ function connect(first_ws) {
                 case "join_room":
                     game.connecting = false;
                     join_query_id = undefined;
+                    join_query_region = undefined;
                     
                     document.body.style.backgroundImage = "none";
                     document.getElementById("status_box").style.display = "block";
@@ -320,7 +325,7 @@ function connect(first_ws) {
 
             Swal.fire({
                 icon: 'error',
-                title: "The servers are busy currently!",
+                title: "The servers are currently busy!",
                 text: "You could've also gotten this error if you have the game open 3 times!\nIf you are using a VPN, try disabling it or using another one."
             });
         }
