@@ -19,16 +19,22 @@ function openSettings() {
 
     if (game.map.sounds.before || game.map.sounds.game) {
         if (game.map.sounds.before) {
+            let extra = "";
+            if (game.map.sounds.before.credit.extra_text) extra = `<br><code>${game.map.sounds.before.credit.extra_text.replace(/\n/g, "<br>")}</code><br>`;
+
             if (game.map.sounds.before.credit.link) {
-                sound_text.push(`Before game starts music: <a href="${game.map.sounds.before.credit.link}" class="light_link">${game.map.sounds.before.credit.text}</a>`);
+                sound_text.push(`Before game starts music: <a href="${game.map.sounds.before.credit.link}" class="light_link">${game.map.sounds.before.credit.text}</a>${extra}`);
             } else {
-                sound_text.push(`Before game starts music: ${game.map.sounds.before.credit.text}`);
+                sound_text.push(`Before game starts music: ${game.map.sounds.before.credit.text}${extra}`);
             }
         }
     
         if (game.map.sounds.game) {
+            let extra = "";
+            if (game.map.sounds.game.credit.extra_text) extra = `<br><code>${game.map.sounds.game.credit.extra_text.replace(/\n/g, "<br>")}</code>${extra}<br>`;
+
             if (game.map.sounds.game.credit.link) {
-                sound_text.push(`Game music: <a href="${game.map.sounds.game.credit.link}" class="light_link">${game.map.sounds.game.credit.text}</a>`);
+                sound_text.push(`Game music: <a href="${game.map.sounds.game.credit.link}" class="light_link">${game.map.sounds.game.credit.text}</a>${extra}`);
             } else {
                 sound_text.push(`Game music: ${game.map.sounds.game.credit.text}`);
             }
