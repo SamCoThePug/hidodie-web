@@ -51,7 +51,8 @@ let game = {
         game: null
     },
 
-    dashCooldown: false
+    abilityInterval: null,
+    abilityCooldown: false
 };
 
 let particles = {

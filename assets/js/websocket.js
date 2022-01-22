@@ -110,18 +110,22 @@ function connect(first_ws) {
                     }
 
                     break;
-                case "dashed":
-                    if (game.dashInterval) clearTimeout(game.dashInterval);
+                case "used_ability":
+                    if (game.abilityInterval) {
+                        clearTimeout(game.abilityInterval);
+                        game.abilityInterval = null;
+                    }
 
-                    let dash_length = typeof data.l == "number" ? data.l : 5000;
+                    let ability_length = typeof data.l == "number" ? data.l : 5000;
 
-                    // If data.l exists, it's not a user done dash.
+                    // If data.l exists, it's not a user done ability.
 
-                    game.dashCooldown = Date.now() + dash_length;
-                    game.dashInterval = setTimeout(() => {
-                        game.dashCooldown = false;
+                    game.abilityCooldown = Date.now() + ability_length;
+                    game.abilityInterval = setTimeout(() => {
+                        game.abilityInterval = null;
+                        game.abilityCooldown = false;
                         setStatusBox();
-                    }, dash_length);
+                    }, ability_length);
                     break;
                 case "particles-teleported":
                     particles.teleported.push(new Teleportation_Effect(data.x, data.y, game.players[data.p].color));

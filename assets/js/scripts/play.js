@@ -40,7 +40,7 @@ router.paths.play.unload = (path, dontdopath) => {
     document.getElementById("game_loading").style.display = "none";
 
     game.room = null;
-    game.dashCooldown = false;
+    game.abilityCooldown = false;
     game.fully_loaded = false;
     game.map_loaded = {};
     game.map_img = {};

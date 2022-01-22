@@ -58,7 +58,7 @@ function draw() {
 
     if (!game.fully_loaded) return;
 
-    if (game.players[game.username].class == "dash" && !game.dashCooldown && !game.typing && keyIsDown(32)) sendWS(`2`);
+    if (game.players[game.username].class == "dash" && !game.abilityCooldown && !game.typing && keyIsDown(32)) sendWS(`2`);
 
     if (!game.typing && !touch.ing) {
         let new_movement = { x: 2, y: 2 };
@@ -274,7 +274,7 @@ function draw() {
         circle(mouse_pos.x, mouse_pos.y, 20);
     }
 
-    if (game.dashCooldown) setStatusBox();
+    if (game.abilityCooldown) setStatusBox();
     
     function currentCollusion(player) {
         let i = 0;

@@ -1,6 +1,6 @@
 function doubleClicked() {
     if (!game.room) return;
-    if (game.players[game.username].class == "dash" && !game.dashCooldown) sendWS(`2`);
+    if (game.players[game.username].class == "dash" && !game.abilityCooldown) sendWS(`2`);
 }
 
 function touchStarted(event) {
