@@ -58,12 +58,9 @@
                 title: 'Login - Select a region.',
                 html: `<select id="region" class="swal2-input"></select>`,
                 confirmButtonText: 'Sign in',
-                focusConfirm: false,
-                preConfirm: () => {
-                    return Swal.getPopup().querySelector('#region').value;
-                }
-            }).then(async WS_HOST => {
-                const req = await fetch(`${document.location.protocol}//${WS_HOST}/admin/callback`, {
+                focusConfirm: false
+            }).then(async () => {
+                const req = await fetch(`${document.location.protocol}//${Swal.getPopup().querySelector('#region').value.toString()}/admin/callback`, {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json"
