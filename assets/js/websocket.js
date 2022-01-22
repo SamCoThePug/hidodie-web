@@ -326,7 +326,7 @@ function connect(first_ws) {
             Swal.fire({
                 icon: 'error',
                 title: "The servers are currently busy!",
-                text: "You could've also gotten this error if you have the game open 3 times!\nIf you are using a VPN, try disabling it or using another one."
+                text: "You could've also gotten this error if you have the game open three times!\nIf you are using a VPN, try disabling it or using another one."
             });
         }
         
