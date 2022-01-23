@@ -58,9 +58,10 @@ function openSettings() {
             let volume = document.getElementById("volume");
             
             volume_slider_interval = setInterval(() => {
+                if (volume.value / 100 == game.volume) return;
                 game.volume = volume.value / 100;
-                changeVolume(determineVolume());
-            })
+                changeVolume(Math.floor(determineVolume()));
+            }, 100);
         },
         onClose: () => {
             clearInterval(volume_slider_interval);
