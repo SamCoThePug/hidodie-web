@@ -122,7 +122,7 @@ function checkIfGood(creating_room, modify_settings) {
 
     if (s !== Math.round(s)) return sendError("You can't have decimal of seekers ingame.");
     if (s < 1) return sendError("There must be at least 1 seeker.");
-    if (s > 3) return sendError("There cannot be over 3 seekers.");
+    if (s > 19) return sendError("There cannot be over 19 seekers.");
 
     let m = document.getElementById(modify_settings ? "modify_mapid" : "create_mapid").value;
 
@@ -134,7 +134,7 @@ function checkIfGood(creating_room, modify_settings) {
 async function createRoom() {
     if (game.connecting) return;
     if (!p5_loaded_check) return;
-    if (!checkIfGood()) return;
+    if (!checkIfGood(true)) return;
 
     WS_HOST = document.getElementById("region").value;
     if (!(await makeSureNodeIsOnline())) return;
@@ -155,7 +155,8 @@ async function createRoom() {
 
     game.connecting = true;
 
-    sendWS(`0${document.getElementById("create_ispublic").checked ? 1 : 0}${parseFloat(document.getElementById("create_seekers").value)}${parseFloat(document.getElementById("create_choosetimer").value)},${document.getElementById("create_mapid").value || "random"},${chosenColor()}${chooseClass()}${document.getElementById("username").value}`)
+    let seekers = parseFloat(document.getElementById("create_seekers").value).toString();
+    sendWS(`0${document.getElementById("create_ispublic").checked ? 1 : 0}${seekers.length == 1 ? `0${seekers}` : seekers}${parseFloat(document.getElementById("create_choosetimer").value)},${document.getElementById("create_mapid").value || "random"},${chosenColor()}${chooseClass()}${document.getElementById("username").value}`)
 }
 
 async function joinRoom(quick) {
