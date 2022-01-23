@@ -28,6 +28,7 @@ let game = {
     map_fps: {},
     map_loop: {},
     hiders_vision_img: null,
+    volume: 1,
 
     players: {},
     interpolated_pos: {},

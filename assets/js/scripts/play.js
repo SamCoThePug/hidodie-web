@@ -112,11 +112,14 @@ function checkIfGood(creating_room, modify_settings) {
         if (!creating_room) return true;
     }
 
-    let t = parseFloat(document.getElementById(modify_settings ? "modify_choosetimer" : "create_choosetimer").value);
+    let choosetimerthing = document.getElementById(modify_settings ? "modify_choosetimer" : "create_choosetimer");
+    if (choosetimerthing) {
+        let t = parseFloat(choosetimerthing.value);
 
-    if (t !== Math.round(t)) return sendError("The number of seconds on how long the game lasts must be rounded to the nearest whole number.");
-    if (t < 30) return sendError("The game must last at least 30 seconds.");
-    if (t > 600) return sendError("The game must last less than 600 seconds.");
+        if (t !== Math.round(t)) return sendError("The number of seconds on how long the game lasts must be rounded to the nearest whole number.");
+        if (t < 30) return sendError("The game must last at least 30 seconds.");
+        if (t > 600) return sendError("The game must last less than 600 seconds.");
+    }
 
     let s = parseFloat(document.getElementById(modify_settings ? "modify_seekers" : "create_seekers").value);
 

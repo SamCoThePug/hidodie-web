@@ -20,17 +20,17 @@
     
             <h3>Play</h3>
 
-            Username: <input id="username" class="theme_color" maxlength=11>
+            Username: <input id="username" class="input theme_color" maxlength=11>
             
             <br><br>
             
             Region:
-            <select id="region" class="theme_color"></select>
+            <select id="region" class="input theme_color"></select>
 
             <br><br>
             
             Color:
-            <select id="color" class="theme_color">
+            <select id="color" class="input theme_color">
                 <option value="random">Random</option>
                 <option value="0">Aqua</option>
                 <option value="1">Blue</option>
@@ -47,7 +47,7 @@
             <br><br>
     
             Class / Ability:
-            <select id="join_class" class="theme_color">
+            <select id="join_class" class="input theme_color">
                 <option value="random">Random</option>
                 <option value="stamina">Stamina</option>
                 <option value="dash">Dash</option>
@@ -65,16 +65,16 @@
 
             <h3>Play - Create Room</h3>
             <p>
-                Public: <input type="checkbox" id="create_ispublic" class="theme_color"><br>
-                Map ID: <input id="create_mapid" class="theme_color" placeholder="Random"><br>
-                Seekers: <input type="number" id="create_seekers" class="theme_color" min="1" max="3" value="1"><br>
-                Timer: <input type="number" id="create_choosetimer" class="theme_color" min="30" max="600" value="180"> seconds
+                Public: <input type="checkbox" id="create_ispublic" class="input theme_color"><br>
+                Map ID: <input id="create_mapid" class="input theme_color" placeholder="Random"><br>
+                Seekers: <input type="number" id="create_seekers" class="input theme_color" min="1" max="3" value="1"><br>
+                Timer: <input type="number" id="create_choosetimer" class="input theme_color" min="30" max="600" value="180"> seconds
                 <span id="create_debug_option">
                     <br>
                     Debug: <input type="checkbox" id="create_debug">
                 </span>
             </p>
-            <p><button onclick="createRoom()" class="theme_color">Create</button></p>
+            <p><button onclick="createRoom()" class="input theme_color">Create</button></p>
         </div>
     </div>
     

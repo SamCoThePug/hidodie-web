@@ -1,18 +1,22 @@
+let volume_slider_interval;
+
 function openSettings() {
+    let volume_text = `Volume: <input type="range" id="volume" min="0" max="100" value="${game.volume * 100}" onchange="game.volume = this.value / 100; changeVolume(determineVolume());"><br>`
+
     let class_text = `Class: ` +
-        `<select id="modify_class" class="light_input" onchange="changeClass()">` +
+        `<select id="modify_class" class="input light_input" onchange="changeClass()">` +
             `<option value="stamina"${game.players[game.username].class == "stamina" ? " selected" : ""}>Stamina</option>` +
             `<option value="dash"${game.players[game.username].class == "dash" ? " selected" : ""}>Dash</option>` +
         `</select>`;
 
     let host_text = 
-        `<br><br>Public: <input type="checkbox" onclick="togglePublic();" id="modify_ispublic"${game.public ? " checked" : ""}><br>` +
-        `Map: <input class="light_input" id="modify_mapid" onblur="setMap();" value="${game.map.id}"><br>` +
-        `Seekers: <input type="number" class="light_input" id="modify_seekers" onblur="setSeekers();" min="1" max="3" value="${game.seeker_count}"><br>` +
+        `<br><br>Public: <input class="input" type="checkbox" onclick="togglePublic();" id="modify_ispublic"${game.public ? " checked" : ""}><br>` +
+        `Map: <input class="input light_input" id="modify_mapid" onblur="setMap();" value="${game.map.id}"><br>` +
+        `Seekers: <input type="number" class="input light_input" id="modify_seekers" onblur="setSeekers();" min="1" max="3" value="${game.seeker_count}"><br>` +
         `Timer: ${
             game.map.synced.enabled ?
-            `<input class="light_input" value="${game.map.synced.duration / 1000}" disabled>` :
-            `<input type="number" class="light_input" id="modify_choosetimer" onblur="setTimer();" min="30" max="600" value="${game.game_length / 1000}">`
+            `<input class="input light_input" value="${game.map.synced.duration / 1000}" disabled>` :
+            `<input type="number" class="input light_input" id="modify_choosetimer" onblur="setTimer();" min="30" max="600" value="${game.game_length / 1000}">`
         } seconds`;
     
     let sound_text = [];
@@ -46,10 +50,21 @@ function openSettings() {
 
     Swal.fire({
         title: "Settings",
-        html: `Currently, there ${Object.entries(game.players).length == 1 ? "is" : "are"} <b>${Object.entries(game.players).length}</b> player${Object.entries(game.players).length == 1 ? "" : "s"} in this room.<br><br>${sound_text}${game.started ? "" : (game.host == game.username ? `${class_text}${host_text}<br><br>` : class_text)}`,
+        html: `Currently, there ${Object.entries(game.players).length == 1 ? "is" : "are"} <b>${Object.entries(game.players).length}</b> player${Object.entries(game.players).length == 1 ? "" : "s"} in this room.<br><br>${sound_text}${volume_text}${game.started ? "" : (game.host == game.username ? `${class_text}${host_text}<br><br>` : class_text)}`,
         confirmButtonText: "Close",
         showDenyButton: true,
-        denyButtonText: `Leave`
+        denyButtonText: `Leave`,
+        didOpen: () => {
+            let volume = document.getElementById("volume");
+            
+            volume_slider_interval = setInterval(() => {
+                game.volume = volume.value / 100;
+                changeVolume(determineVolume());
+            })
+        },
+        onClose: () => {
+            clearInterval(volume_slider_interval);
+        }
     }).then((result) => {
         if (result.isDenied) 
             ws.close();

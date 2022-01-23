@@ -371,20 +371,20 @@ async function setupMap() {
     if (game.map_loop.foreground) clearInterval(game.map_loop.foreground);
     game.map_frame = {};
 
+
+
     if (game.map.sounds.before && game.map.sounds.before.sound) {
         if (game.map.sounds.before && game.map.sounds.before) {
             game.sounds.before = createAudio(game.map.sounds.before.sound);
-            game.sounds.before.volume(game.map.sounds.before.volume);
             game.sounds.before.loop();
         }
     }
 
-    if (game.map.sounds.game && game.map.sounds.game.sound) {
-        if (game.map.sounds.game) {
+    if (game.map.sounds.game && game.map.sounds.game.sound) 
+        if (game.map.sounds.game) 
             game.sounds.game = createAudio(game.map.sounds.game.sound);
-            game.sounds.game.volume(game.map.sounds.game.volume);
-        }
-    }
+
+    setVolume();
 
     if (game.map.images.background && game.map.images.background.img) {
         loadImage(game.map.images.background.img, img => {
@@ -427,5 +427,60 @@ async function setupMap() {
                 if (game.map_frame.foreground == game.map_img.original_foreground.numFrames()) game.map_frame.foreground = 0;
             }, 1000 / game.map_fps.foreground);
         }
+    }
+
+    function setVolume() {
+        let smaller = determineVolume();
+    
+        switch (smaller) {
+            case 0:
+                game.volume = 0;
+                break;
+            case 1:
+                game.volume = game.map.sounds.before.volume;
+            case 2:
+                game.volume = game.map.sounds.before.volume;
+                break;
+            case 3:
+                game.volume = game.map.sounds.game.volume;
+                break;
+        }
+
+        changeVolume(smaller);
+    }
+}
+
+function determineVolume() {
+    let smaller = 0; // 0 = null | 1 = none | 2 = before | 3 = game
+
+    if (game.map.sounds.before && game.map.sounds.before.sound && game.map.sounds.game && game.map.sounds.game.sound) {
+        if (game.map.sounds.before.volume == game.map.sounds.game.volume) {
+            smaller = 1;
+        } else if (game.map.sounds.before.volume < game.map.sounds.game.volume) {
+            smaller = 2;
+        } else {
+            smaller = 3;
+        }
+    } else {
+        if (game.map.sounds.before && game.map.sounds.before.sound) smaller = 2; //game.volume = game.map.sounds.before.volume;
+        if (game.map.sounds.game && game.map.sounds.game.sound) smaller = 3; //game.volume = game.map.sounds.game.volume;
+    }
+
+    return smaller;
+}
+
+function changeVolume(smaller) {
+    switch (smaller) {
+        case 1:
+            game.sounds.before.volume(game.volume);
+            game.sounds.game.volume(game.volume);
+        case 2:
+            game.sounds.before.volume(game.volume);
+            if (game.map.sounds.game && game.map.sounds.game.sound) game.sounds.game.volume(game.volume * game.map.sounds.before.volume * game.map.sounds.game.volume);
+            break;
+        case 3:
+            if (game.map.sounds.before && game.map.sounds.before.sound) game.sounds.before.volume(game.volume * game.map.sounds.before.volume * game.map.sounds.game.volume);
+            game.sounds.game.volume(game.volume);
+            break;
     }
 }

@@ -52,7 +52,7 @@ button:hover {
     background-color: #646464;
 }
 
-input {
+.input {
     background-color: #292929;
     color: white;
     padding: 14px 20px;
