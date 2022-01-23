@@ -263,7 +263,7 @@ async function makeSureNodeIsOnline() {
 }
 
 function copyPlayLink() {
-    navigator.clipboard.writeText(`${location.protocol}//${document.location.hostname}/play?region=${WS_HOST}&room=${game.room}`);
+    navigator.clipboard.writeText(`${location.protocol}//${document.location.hostname}/play?region=${encodeURIComponent(WS_HOST)}&room=${game.room}`);
 
     Swal.fire({
         icon: 'success',
