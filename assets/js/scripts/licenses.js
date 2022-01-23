@@ -2,7 +2,7 @@ let licenses = "";
 
 router.paths.licenses.load = async () => {
     if (!licenses) {
-        let req = await fetch("/api/licenses");
+        let req = await fetch(`${document.location.protocol}//${LOCATIONS[WS_HOST]}/api/licenses`);
         let license_json = await req.json();
 
         if (licenses.length !== 0) return loadLicenses();
