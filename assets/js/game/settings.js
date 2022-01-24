@@ -56,7 +56,8 @@ function openSettings() {
         confirmButtonText: "Close",
         showDenyButton: true,
         denyButtonText: `Leave`,
-        didOpen: () => {
+        didOpen: () => { // causes earrape sometimes.
+            /*
             let volume = document.getElementById("volume");
             
             volume_slider_interval = setInterval(() => {
@@ -64,6 +65,7 @@ function openSettings() {
                 game.volume = Math.floor(volume.value / 10) / 10;
                 changeVolume(determineVolume());
             }, 100);
+            */
         },
         onClose: () => {
             clearInterval(volume_slider_interval);
