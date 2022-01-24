@@ -64,11 +64,10 @@ function openSettings() {
                 game.volume = volume.value / 100;
                 changeVolume(determineVolume());
             }, 100);
-        },
-        onClose: () => {
-            clearInterval(volume_slider_interval);
         }
     }).then((result) => {
+        clearInterval(volume_slider_interval);
+        
         if (result.isDenied) 
             ws.close();
     });
