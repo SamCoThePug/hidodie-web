@@ -1,7 +1,7 @@
 let volume_slider_interval;
 
 function openSettings() {
-    let volume_text = `Volume: <input type="range" id="volume" min="0" max="100" value="${game.volume * 100}" onchange="game.volume = Math.floor(this.value / 10) / 10; changeVolume(determineVolume());"><br>`
+    let volume_text = `Volume: <input type="range" id="volume" min="0" max="100" value="${game.volume * 100}" onchange="game.volume = this.value / 100; changeVolume(determineVolume());"><br>`
 
     let class_text = `Class: ` +
         `<select id="modify_class" class="input light_input" onchange="changeClass()">` +
@@ -56,16 +56,14 @@ function openSettings() {
         confirmButtonText: "Close",
         showDenyButton: true,
         denyButtonText: `Leave`,
-        didOpen: () => { // causes earrape sometimes.
-            /*
+        didOpen: () => {
             let volume = document.getElementById("volume");
             
             volume_slider_interval = setInterval(() => {
                 if (volume.value / 100 == game.volume) return;
-                game.volume = Math.floor(volume.value / 10) / 10;
+                game.volume = volume.value / 100;
                 changeVolume(determineVolume());
             }, 100);
-            */
         },
         onClose: () => {
             clearInterval(volume_slider_interval);
