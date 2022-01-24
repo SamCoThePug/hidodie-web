@@ -22,24 +22,29 @@ function sendMessage(content) {
 }
 
 function doChat(content, command_type) {
+    let c = parseHTML(content);
     switch (command_type) {
         case 0: // gray text
-            game.messages.push(`<span style="color:#505050">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            game.messages.push(`<span style="color:#505050">${c}</span>`);
             break;
         case 1: // error
-            game.messages.push(`<span style="color:#720000">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            game.messages.push(`<span style="color:#720000">${c}</span>`);
             break;
         case 2: // success
-            game.messages.push(`<span style="color:#00461D">${content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</span>`);
+            game.messages.push(`<span style="color:#00461D">${c}</span>`);
             break;
         default: // white text
-            game.messages.push(content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
+            game.messages.push(c);
             break;
     }
     game.messages = game.messages.slice(-9);
 
     document.getElementById("messages").innerHTML = game.messages.join("<br>");
     fixChat();
+}
+
+function parseHTML(html) {
+    return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 function fixChat() {

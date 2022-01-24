@@ -44,6 +44,8 @@ function touchEnded() {
 }
 
 function updateMovement(new_movement) {
+    if (!game.room) return;
+
     if (game.movement.x !== new_movement.x || game.movement.y !== new_movement.y) {
         sendWS(`1${new_movement.x}${new_movement.y}`);
 
@@ -67,4 +69,55 @@ function getMousePos() { // https://bencentra.com/code/2014/12/05/html5-canvas-t
         x: touch.x - rect.left,
         y: touch.y - rect.top
     };
+}
+
+document.addEventListener('keydown', logKey);
+document.addEventListener('keyup', unlogKey);
+
+let holding = [];
+
+function logKey(e) {
+    holding[e.code] = true;
+}
+
+function unlogKey(e) {
+    delete holding[e.code];
+}
+
+function handleMovement() {
+    if (game.players[game.username].class == "dash" && !game.abilityCooldown && !game.typing && holding[getControl('ability', 'Space')]) sendWS(`2`);
+
+    if (!game.typing && !touch.ing) {
+        let new_movement = { x: 2, y: 2 };
+
+        if (holding[getControl('up', 'KeyW')] || holding[getControl('down', 'KeyS')]) {
+            if (!(holding[getControl('up', 'KeyW')] && holding[getControl('down', 'KeyS')])) {
+                if (holding[getControl('up', 'KeyW')]) {
+                    new_movement.y = 0;
+                } else {
+                    new_movement.y = 1;
+                }
+            } else {
+                new_movement.y = 2;
+            }
+        } else {
+            new_movement.y = 2;
+        }
+    
+        if (holding[getControl('left', 'KeyA')] || holding[getControl('right', 'KeyD')]) {
+            if (!(holding[getControl('left', 'KeyA')] && holding[getControl('right', 'KeyD')])) {
+                if (holding[getControl('left', 'KeyA')]) {
+                    new_movement.x = 0;
+                } else {
+                    new_movement.x = 1;
+                }
+            } else {
+                new_movement.x = 2;
+            }
+        } else {
+            new_movement.x = 2;
+        }
+
+        updateMovement(new_movement);
+    }
 }

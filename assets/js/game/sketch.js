@@ -58,41 +58,7 @@ function draw() {
 
     if (!game.fully_loaded) return;
 
-    if (game.players[game.username].class == "dash" && !game.abilityCooldown && !game.typing && keyIsDown(32)) sendWS(`2`);
-
-    if (!game.typing && !touch.ing) {
-        let new_movement = { x: 2, y: 2 };
-
-        if (keyIsDown(87) || keyIsDown(83)) { // 87 = w | 83 = s
-            if (!(keyIsDown(87) && keyIsDown(83))) {
-                if (keyIsDown(87)) {
-                    new_movement.y = 0;
-                } else { // keyIsDown(83)
-                    new_movement.y = 1;
-                }
-            } else {
-                new_movement.y = 2;
-            }
-        } else {
-            new_movement.y = 2;
-        }
-    
-        if (keyIsDown(65) || keyIsDown(68)) { // a = 65 | d = 68
-            if (!(keyIsDown(65) && keyIsDown(68))) {
-                if (keyIsDown(65)) {
-                    new_movement.x = 0;
-                } else { // keyIsDown(68)
-                    new_movement.x = 1;
-                }
-            } else {
-                new_movement.x = 2;
-            }
-        } else {
-            new_movement.x = 2;
-        }
-
-        updateMovement(new_movement);
-    }
+    handleMovement();
 
     if (game.map_img.background) image(game.map_img.background[game.map_frame.background], (627.5 - you_pos.x) * game.scale, (347.5 - you_pos.y) * game.scale);
 

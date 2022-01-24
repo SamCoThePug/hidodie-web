@@ -9,6 +9,8 @@ function openSettings() {
             `<option value="dash"${game.players[game.username].class == "dash" ? " selected" : ""}>Dash</option>` +
         `</select>`;
 
+    let controls_text = `<button class="input light_input" onclick="openControls()">Change Controls</button><br>`
+
     let host_text = 
         `<br><br>Public: <input class="input" type="checkbox" onclick="togglePublic();" id="modify_ispublic"${game.public ? " checked" : ""}><br>` +
         `Map: <input class="input light_input" id="modify_mapid" onblur="setMap();" value="${game.map.id}"><br>` +
@@ -50,7 +52,7 @@ function openSettings() {
 
     Swal.fire({
         title: "Settings",
-        html: `Currently, there ${Object.entries(game.players).length == 1 ? "is" : "are"} <b>${Object.entries(game.players).length}</b> player${Object.entries(game.players).length == 1 ? "" : "s"} in this room.<br><br>${sound_text}${volume_text}${game.started ? "" : (game.host == game.username ? `${class_text}${host_text}<br><br>` : class_text)}`,
+        html: `Currently, there ${Object.entries(game.players).length == 1 ? "is" : "are"} <b>${Object.entries(game.players).length}</b> player${Object.entries(game.players).length == 1 ? "" : "s"} in this room.<br><br>${sound_text}${volume_text}${controls_text}${game.started ? "" : (game.host == game.username ? `${class_text}${host_text}<br><br>` : class_text)}`,
         confirmButtonText: "Close",
         showDenyButton: true,
         denyButtonText: `Leave`,
@@ -70,6 +72,39 @@ function openSettings() {
         if (result.isDenied) 
             ws.close();
     });
+}
+
+function openControls() {
+    Swal.fire({
+        title: "Settings - Controls",
+        html:
+            `<h3>Movement</h3>` +
+            `Up: <input id="controls-up" value="${getControlHTML('up', 'KeyW')}" onkeydown="setControls('up', event.code); event.preventDefault();"><br>` + 
+            `Left: <input id="controls-left" value="${getControlHTML('left', 'KeyA')}" onkeydown="setControls('left', event.code); event.preventDefault();"><br>` +
+            `Down: <input id="controls-down" value="${getControlHTML('down', 'KeyS')}" onkeydown="setControls('down', event.code); event.preventDefault();"><br>` +
+            `Right: <input id="controls-right" value="${getControlHTML('right', 'KeyD')}" onkeydown="setControls('right', event.code); event.preventDefault();">` +
+
+            `<h3>Ability</h3>` +
+            `Use: <input id="controls-ability" value="${getControlHTML('ability', 'Space')}" onkeydown="setControls('ability', event.code); event.preventDefault();">`
+        ,
+        confirmButtonText: "Back",
+    }).then(() => {
+        openSettings();
+    });
+}
+
+function getControl(which, defaultv) {
+    return getCookie(`controls-${which}`) || defaultv;
+}
+
+function getControlHTML(which, defaultv) {
+    return parseHTML(getControl(which, defaultv));
+}
+
+function setControls(which, key) {
+    setCookie(`controls-${which}`, key, 365);
+
+    if (document.getElementById(`controls-${which}`)) document.getElementById(`controls-${which}`).value = key;
 }
 
 function togglePublic() {
