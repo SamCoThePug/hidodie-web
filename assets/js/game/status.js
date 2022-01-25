@@ -1,7 +1,11 @@
-function setStatusBox() {
+function setStatusBox(attempt) {
     let status_box = document.getElementById("status_box");
 
     const you = game.players[game.username];
+    if (!you) return setTimeout(() => {
+        if (attempt + 1 > 5) return;
+        setStatusBox(attempt ? attempt + 1 : 1);
+    }, 200);
 
     if (!game.started) {
         if (Object.entries(game.players).length >= game.seeker_count + 1) {
