@@ -1,5 +1,7 @@
 "use strict";
 
+let load_progress = 0;
+
 let join_query_region = Object.fromEntries(new URLSearchParams(window.location.search).entries()).region;
 let join_query_id = Object.fromEntries(new URLSearchParams(window.location.search).entries()).room;
 
@@ -170,14 +172,24 @@ let p5_loaded = false;
 
 (async () => {
     await loadScript(`p5/p5.min`);
+    addPercentLoading();
+
     await loadScript(`sweetalert2`);
+    addPercentLoading();
+
     await loadScript(`game/chat`);
+    addPercentLoading();
+
     await loadScript(`game/setup`);
+    addPercentLoading();
 
     let p5_loaded_check = setInterval(async () => {
         if (p5_loaded) {
             clearInterval(p5_loaded_check);
-            for (const name of scripts) await loadScript(name);
+            for (const name of scripts) {
+                await loadScript(name);
+                addPercentLoading();
+            }
         }
     }, 100);
 })();
@@ -185,7 +197,7 @@ let p5_loaded = false;
 function loadScript(name) {
     let url = `/assets/js/${name}.js`;
 
-	return new Promise(function(resolve, reject) {
+	return new Promise((resolve, reject) => {
 		let script = document.createElement('script');
 		script.src = url;
 		script.async = false;
@@ -218,4 +230,9 @@ function p5_loaded_check() {
     }
 
     return p5_loaded;
+}
+
+function addPercentLoading() {
+    load_progress += 1 / (scripts.length + 4 + 11); // 4 = pre-load scripts, 11 = p5js loaded. (11 files loaded)
+    if (document.getElementById("load_progress")) document.getElementById("load_progress").innerHTML = Math.round(load_progress * 10000) / 100;
 }

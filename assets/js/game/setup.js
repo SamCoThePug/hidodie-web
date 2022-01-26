@@ -100,6 +100,8 @@ function preload() {
 
 function setup() {
     p5_loaded = true;
+    for (let i = 0; i < 11; i++)
+        addPercentLoading();
 
     setInterval(() => {
         let movers = document.getElementsByClassName("home_move");
