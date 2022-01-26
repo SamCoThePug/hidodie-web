@@ -257,7 +257,7 @@ function connect(first_ws) {
                     document.body.style.backgroundImage = "none";
                     document.getElementById("status_box").style.display = "block";
                     
-                    if (!fullscreen()) fullscreen(true);
+                    if (!no_fullscreen && !fullscreen()) fullscreen(true);
 
                     setCookie("username", data.u.startsWith("[Guest] ") ? data.u.slice("[Guest] ".length) : data.u, 365);
 

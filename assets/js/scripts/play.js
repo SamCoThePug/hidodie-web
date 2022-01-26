@@ -83,7 +83,7 @@ router.paths.play.unload = (path, dontdopath) => {
     
     if (!dontdopath && path !== "index") document.body.style.backgroundImage = "none";
 
-    if (p5_loaded && fullscreen()) fullscreen(false);
+    if (!no_fullscreen && p5_loaded && fullscreen()) fullscreen(false);
 }
 
 /* */
