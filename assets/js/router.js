@@ -5,6 +5,11 @@ let load_progress = 0;
 let join_query_region = Object.fromEntries(new URLSearchParams(window.location.search).entries()).region;
 let join_query_id = Object.fromEntries(new URLSearchParams(window.location.search).entries()).room;
 
+let ignore_fullscreen_warning =
+    typeof Object.fromEntries(new URLSearchParams(window.location.search).entries()).ifw == "string" ?
+    Object.fromEntries(new URLSearchParams(window.location.search).entries()).ifw.toLowerCase() == "true" :
+    false;
+
 // Router.
 
 class Router {
@@ -236,3 +241,7 @@ function addPercentLoading() {
     load_progress += 1 / (scripts.length + 4 + 11); // 4 = pre-load scripts, 11 = p5js loaded. (11 files loaded)
     if (document.getElementById("load_progress")) document.getElementById("load_progress").innerHTML = Math.round(load_progress * 10000) / 100;
 }
+
+document.onfullscreenerror = () => {
+    if (!ignore_fullscreen_warning) alert("Could not enable fullscreen.");
+};
