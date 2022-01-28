@@ -238,6 +238,10 @@ function p5_loaded_check() {
 }
 
 function addPercentLoading() {
-    load_progress += 1 / (scripts.length + 4 + 11); // 4 = pre-load scripts, 11 = p5js loaded. (11 files loaded)
+    load_progress += 1 / (scripts.length + 4 + 11 + 1); // 4 = pre-load scripts, 11 = p5js loaded. (11 files loaded), 1 = hcaptcha
     if (document.getElementById("load_progress")) document.getElementById("load_progress").innerHTML = Math.round(load_progress * 10000) / 100;
+}
+
+function hcaptchaLoaded() {
+    load_progress += 1 / (scripts.length + 4 + 11 + 1);
 }

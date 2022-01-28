@@ -14,17 +14,15 @@ let latency;
 let connection_timeout;
 let connected = false;
 
-function connect(first_ws) {
+function connect(first_ws, security_code) {
     let timeout_interval = Date.now();
-    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${LOCATIONS[WS_HOST]}/api/connect`);
+    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${LOCATIONS[WS_HOST]}/api/connect`, security_code);
     let test_if_open;
 
     ws.onopen = async() => {
         connected = true;
 
         console.log("[WEBSOCKET] Connected!");
-
-        sendWS(first_ws);
 
         test_if_open = setTimeout(() => {
             if (game.connecting) 
@@ -43,6 +41,10 @@ function connect(first_ws) {
             if (data.a !== "timer" && data.a !== "bunk") console.log(data);
 
             switch(data.a) {
+                case "first_ping":
+                    sendWS(first_ws);
+                    break;
+
                 case "ping":
                     sendWS(`00`);
 
@@ -288,6 +290,7 @@ function connect(first_ws) {
 
     ws.onclose = () => {
         console.log("[WEBSOCKET] Disconnected.");
+        renderHCaptcha();
         restartConnection();
     }
 
@@ -356,7 +359,17 @@ function connectionQueue() {
 */
 
 function sendWS(content) {
-    if (!ws) return connect(content);
+    if (!ws) {
+        if (hcaptcha.getResponse() == "") {
+            game.connecting = false;
+            return Swal.fire({
+                icon: 'error',
+                title: "You didn't do your captcha."
+            });
+        }
+        connect(content, hcaptcha.getResponse());
+        return;
+    }
     ws.send(content);
 }
 

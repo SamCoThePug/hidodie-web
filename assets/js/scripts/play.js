@@ -52,6 +52,8 @@ router.paths.play.load = () => {
             classSelect.selectedIndex = j;
 
     if (game.logged_in) document.getElementById("create_debug_option").style.display = "block";
+
+    renderHCaptcha();
 }
 
 router.paths.play.unload = (path, dontdopath) => {
@@ -274,5 +276,24 @@ function copyPlayLink() {
         title: 'Copied the link to your clipboard!',
         timer: 5000,
         timerProgressBar: true
+    });
+}
+
+function onHCaptchaError() {
+    Swal.fire({
+        icon: 'error',
+        title: "An error has occured with hCaptcha! Please try reloading."
+    });
+}
+
+function renderHCaptcha() {
+    try {
+        hcaptcha.remove()
+    } catch(e) {};
+    
+    hcaptcha.render("h-captcha", {
+        sitekey: '0d17e8f0-030e-4493-a8ef-cb8a1fb80b1c',
+        theme: 'dark',
+        'error-callback': 'onHCaptchaError',
     });
 }
