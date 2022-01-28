@@ -100,8 +100,47 @@ function draw() {
                       py = (player_pos[username].y - you_pos.y + 347.5) * game.scale
 
                 translate(px, py);
+            
+                if (game.map.shadow) {
+                    let radiusx = 50 * game.scale;
+                    let radiusy = 50 * game.scale;
+                    if (game.map.shadow.radius) {
+                        radiusx = (game.map.shadow.radius.x || 50) * game.scale;
+                        radiusy = (game.map.shadow.radius.y || 50) * game.scale;
+                    }
+                    let offsetx = 0;
+                    let offsety = 0;
+                    if (game.map.shadow.offset) {
+                        offsetx = (game.map.shadow.offset.x || 0) * game.scale;
+                        offsety = (game.map.shadow.offset.y || 0) * game.scale;
+                    }
+                    let moveby = 12.5 * game.scale;
+                    let transparency = game.map.shadow.transparency || 0.1;
+                    switch (game.map.shadow.type) {
+                        case 1:
+                            noStroke();
+                            ellipseMode(CENTER);
+                            fill(`rgba(0,0,0,${transparency})`);
+                            ellipse(moveby + offsetx, moveby + offsety, radiusx, radiusy);
+                            break;
+                        case 2:
+                            noStroke();
+                            rectMode(CENTER);
+                            fill(`rgba(0,0,0,${transparency})`);
+                            rect(moveby + offsetx, moveby + offsety, radiusx, radiusy, game.map.shadow.round ? game.map.shadow.round * game.scale : 10);
+                            break; //game.map.shadow.radius
+                        case 3:
+                            imageMode(CENTER);
+                            tint(game.map.shadow.darkness || 255, 255 * transparency);
+                            image(color_images[info.color], moveby + offsetx, moveby + offsety, radiusx / 2, radiusy / 2);
+                            imageMode(CORNER);
+                            noTint();
+                            break;
+                    }
+                }
 
-                loop_usernames.push([ username, px, py, info ]); //
+                loop_usernames.push([ username, px, py, info ]);
+                
                 image(color_images[info.color], 0, 0, 25 * game.scale, 25 * game.scale);
 
                 if (info !== you && you.role == SPECTATOR) {
