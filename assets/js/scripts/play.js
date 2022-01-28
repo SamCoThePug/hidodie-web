@@ -292,7 +292,7 @@ function renderHCaptcha() {
     } catch(e) {};
     
     hcaptcha.render("h-captcha", {
-        sitekey: '0d17e8f0-030e-4493-a8ef-cb8a1fb80b1c',
+        sitekey: location.href.startsWith("http://localhost/") ? '10000000-ffff-ffff-ffff-000000000001' : '0d17e8f0-030e-4493-a8ef-cb8a1fb80b1c',
         theme: 'dark',
         'error-callback': 'onHCaptchaError',
     });
